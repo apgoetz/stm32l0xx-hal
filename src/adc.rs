@@ -243,6 +243,18 @@ impl<DmaChan, Buffer> Adc<Active<DmaChan, Buffer>>
             }
         )
     }
+
+    /// checks if half of the DMA transfer has completed by reading
+    /// peripheral registers. Does not clear the underlying flag
+    pub fn is_half_tc(&self) -> bool {
+	self._state.transfer.state().1
+    }
+
+    /// checks if the full DMA transfer has completed by reading
+    /// peripheral registers. Does not clear the underlying flag
+    pub fn is_tc(&self) -> bool {
+	self._state.transfer.state().2
+    }
 }
 
 impl<State> Adc<State> {

@@ -29,8 +29,8 @@ use stm32l0xx_hal::{
 
 use stm32l0xx_hal::serial::Serial1Ext;
 
-const BUFSIZE : usize = 8; 	// the size of the buffer to use
-const FREQUENCY : u32 = 1; // the frequency to sample at
+const BUFSIZE : usize = 64; 	// the size of the buffer to use
+const FREQUENCY : u32 = 200; // the frequency to sample at
 
 #[entry]
 fn main() -> ! {
@@ -83,6 +83,12 @@ fn main() -> ! {
         .select_master_mode(MMS_A::UPDATE);
 
     loop {
+	
+	loop {
+	    if adc.is_half_tc() || adc.is_tc() {
+		break;
+	    }
+	}
         for val in adc.read_available().unwrap() {
             write!(tx, "{}\r\n", val.unwrap()).unwrap();
         }
